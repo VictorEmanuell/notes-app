@@ -9,11 +9,13 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
     },
     header: {
+        backgroundColor: Colors.primary,
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 25,
-        paddingVertical: 20,
-        width: '100%'
+        paddingVertical: 15,
+        paddingTop: 22,
+        width: '100%',
     },
     textHeader: {
         fontFamily: Fonts.bold,
