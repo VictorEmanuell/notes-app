@@ -1,20 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
+import {
+  useFonts,
+  Inter_200ExtraLight,
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_800ExtraBold
+} from '@expo-google-fonts/inter'
+import * as NavigationBar from 'expo-navigation-bar';
+import Colors from './src/assets/Colors';
+
+import Routes from './src/routes';
 
 export default function App() {
+
+  NavigationBar.setBackgroundColorAsync(Colors.primary);
+  NavigationBar.setBorderColorAsync(Colors.secondary);
+
+  const [fontsLoaded] = useFonts({
+    Inter_200ExtraLight,
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_800ExtraBold
+  })
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle='light-content' backgroundColor={Colors.primary} />
+      <Routes />
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
