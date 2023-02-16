@@ -8,7 +8,7 @@ export function NoteCard({ id, title, date, text, navigation }) {
 
     Animated.timing(fadeInUp, {
         toValue: 0,
-        duration: 350,
+        duration: 400,
         useNativeDriver: false
     }).start();
 
@@ -20,8 +20,8 @@ export function NoteCard({ id, title, date, text, navigation }) {
                     navigation.navigate('Note', { id, title, date, text })
                 }}
             >
-                {title ? <Text style={styles.title}>{title}</Text> : null}
-                {date ? <Text style={styles.date}>{date}</Text> : null}
+                {title ? <Text numberOfLines={1} style={styles.title}>{title}</Text> : null}
+                {date ? <Text numberOfLines={1} style={styles.date}>{date}</Text> : null}
                 {text ? <Text numberOfLines={5} style={styles.text}>{text}</Text> : null}
             </TouchableOpacity>
         </Animated.View>

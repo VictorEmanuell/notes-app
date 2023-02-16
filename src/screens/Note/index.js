@@ -1,11 +1,20 @@
+import { useState } from 'react';
 import { View, Text, TouchableOpacity, Vibration, ScrollView } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
 import { styles } from './styles';
 import Colors from '../../assets/Colors';
+import Fonts from '../../assets/Fonts';
 
 export function Note({ route, navigation }) {
     const { id, title, date, text } = route.params;
+
+    const [visible, setVisible] = useState(false);
+
+    const hideMenu = () => setVisible(false);
+
+    const showMenu = () => setVisible(true);
 
     return (
         <View style={styles.container}>
@@ -23,15 +32,47 @@ export function Note({ route, navigation }) {
 
                 <Text style={styles.textTitle}>{title}</Text>
 
-                <TouchableOpacity
-                    style={styles.optionsButton}
-                    activeOpacity={0.8}
-                    onPressIn={() => {
-                        Vibration.vibrate(15, false)
-                    }}
-                >
-                    <SimpleLineIcons name="options-vertical" size={22} color={Colors.white} />
-                </TouchableOpacity>
+                <View style={styles.optionsButton}>
+                    <Menu
+                        visible={visible}
+                        anchor={
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPressIn={() => {
+                                    Vibration.vibrate(15, false)
+                                    showMenu()
+                                }}
+                            >
+                                <SimpleLineIcons name='options-vertical' size={25} color={Colors.white} />
+                            </TouchableOpacity>
+                        }
+                        onRequestClose={hideMenu}
+                        style={{
+                            borderRadius: 15,
+                            width: '45%'
+                        }}
+                        animationDuration={200}
+                    >
+                        <MenuItem
+                            onPress={hideMenu}
+                            pressColor="#0000000D"
+                            textStyle={{
+                                fontFamily: Fonts.light,
+                                fontSize: 15
+                            }}
+                        >Editar</MenuItem>
+                        <MenuDivider />
+                        <MenuItem
+                            textStyle={{
+                                color: 'red',
+                                fontFamily: Fonts.light,
+                                fontSize: 15
+                            }}
+                            pressColor="#0000000D"
+                            onPress={hideMenu}
+                        >Excluir</MenuItem>
+                    </Menu>
+                </View>
             </View>
 
             <ScrollView
