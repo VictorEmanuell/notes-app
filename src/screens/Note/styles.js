@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: Colors.white,
         paddingHorizontal: 20,
-        paddingVertical: 5
+        paddingVertical: 5,
+        paddingBottom: 20
     }
 });

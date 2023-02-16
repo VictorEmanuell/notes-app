@@ -1,8 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator, CardStyleInterpolators } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Home } from './screens/Home';
 import { Note } from './screens/Note';
+import { NewNote } from './screens/NewNote';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,8 +16,27 @@ export default function Routes() {
                     headerShown: false,
                 }}
             >
-                <Stack.Screen name='Home' component={Home} />
-                <Stack.Screen name='Note' component={Note} />
+                <Stack.Screen
+                    name='Home'
+                    component={Home}
+                    options={{
+                        animation: 'slide_from_right'
+                    }}
+                />
+                <Stack.Screen
+                    name='Note'
+                    component={Note}
+                    options={{
+                        animation: 'slide_from_right'
+                    }}
+                />
+                <Stack.Screen
+                    name='NewNote'
+                    component={NewNote}
+                    options={{
+                        animation: 'slide_from_bottom'
+                    }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );
