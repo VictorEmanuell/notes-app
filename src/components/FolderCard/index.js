@@ -94,7 +94,8 @@ export function FolderOptions({
     setFolderSelect,
     isSelectable,
     setIsSelectable,
-    folders
+    folders,
+    setModalVisible
 }) {
     const fadeInLeft = useRef(new Animated.Value(-1000)).current;
 
@@ -194,7 +195,7 @@ export function FolderOptions({
                     activeOpacity={0.8}
                     onPressIn={() => {
                         Vibration.vibrate(15, false)
-
+                        setModalVisible(true)
                     }}
                 >
                     <SimpleLineIcons name="plus" size={24} color={Colors.white} />

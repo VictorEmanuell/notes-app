@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ScrollView, TouchableOpacity, View, Text, Vibration } from 'react-native';
-import { SimpleLineIcons } from '@expo/vector-icons'
+import { ScrollView, TouchableOpacity, View, Text, Vibration, Modal, TextInput } from 'react-native';
+import { SimpleLineIcons, AntDesign } from '@expo/vector-icons'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
 import { styles } from './styles';
@@ -9,11 +9,25 @@ import Fonts from '../../../assets/Fonts';
 
 import { FolderCard, FolderOptions } from '../../../components/FolderCard';
 
+const colors = [
+    '#0c0636',
+    '#095169',
+    '#059b9a',
+    '#53ba83',
+    '#ef4335',
+    '#f68b36',
+    '#cae081',
+    '#88eed0',
+    '#314c53',
+    '#5a7f78'
+]
+
 export function Folders({ setMode, data, setFolderSelect }) {
     const { folders } = data;
     const [visible, setVisible] = useState(false);
     const [isSelectable, setIsSelectable] = useState(false);
-    
+    const [modalVisible, setModalVisible] = useState(false);
+
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
 
@@ -95,6 +109,7 @@ export function Folders({ setMode, data, setFolderSelect }) {
                     isSelectable={isSelectable}
                     setIsSelectable={setIsSelectable}
                     folders={folders}
+                    setModalVisible={setModalVisible}
                 />
                 {
                     folders.map(({ id, name, color }) => {
@@ -113,6 +128,107 @@ export function Folders({ setMode, data, setFolderSelect }) {
                     })
                 }
             </ScrollView>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: 'white',
+                        borderRadius: 15,
+                        padding: 20,
+                        elevation: 5,
+                    }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
+                            <SimpleLineIcons name='folder-alt' size={26} color='gray' />
+
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPressIn={() => {
+                                    Vibration.vibrate(15, false)
+                                    setModalVisible(false)
+                                }}
+                                style={{
+                                    padding: 5,
+                                    backgroundColor: 'red',
+                                    borderRadius: 10,
+                                }}
+                            >
+                                <AntDesign name="close" size={24} color={Colors.white} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <TextInput
+                            keyboardType="visible-password"
+                            placeholder='Nova pasta'
+                            style={{
+                                color: Colors.primary,
+                                padding: 10,
+                                fontFamily: Fonts.regular,
+                                fontSize: 15,
+                                borderBottomColor: '#c2c2c2',
+                                borderBottomWidth: 0.5,
+                                marginTop: 10
+                            }}
+                        />
+
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', marginTop: 15 }}>
+                            {
+                                colors.map(color => {
+                                    return (
+                                        <TouchableOpacity
+                                            key={color}
+                                            style={{
+                                                backgroundColor: color,
+                                                padding: 20,
+                                                borderRadius: 10,
+                                                margin: 4
+                                            }}
+                                            activeOpacity={0.8}
+                                        />
+                                    )
+                                })
+                            }
+                        </View>
+
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            onPressIn={() => {
+                                Vibration.vibrate(15, false)
+                            }}
+                            style={{
+                                padding: 20,
+                                paddingVertical: 15,
+                                marginHorizontal: 20,
+                                marginVertical: 20,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: Colors.blue,
+                                borderRadius: 10,
+                            }}
+                        >
+                            <Text style={{
+                                fontFamily: Fonts.bold,
+                                fontSize: 15,
+                                color: Colors.white
+                            }}>Criar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }

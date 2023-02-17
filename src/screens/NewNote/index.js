@@ -34,7 +34,7 @@ export function NewNote({ navigation }) {
                     style={styles.inputTitle}
                     placeholder="Título"
                     placeholderTextColor="#4eaaa3"
-                    keyboardType="text"
+                    keyboardType="visible-password"
                 />
 
                 <TextInput
