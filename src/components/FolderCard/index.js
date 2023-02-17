@@ -72,7 +72,7 @@ export function FolderCard({
                     style={styles.folderContainer}
                     activeOpacity={0.8}
                     onPress={() => {
-                        setFolderSelect(id)
+                        setFolderSelect({ id, name })
                         setMode('notes')
                     }}
                     onLongPress={() => {
@@ -96,8 +96,6 @@ export function FolderOptions({
     setIsSelectable,
     folders
 }) {
-    const [allSelected, setAllSelected] = useState(false);
-
     const fadeInLeft = useRef(new Animated.Value(-1000)).current;
 
     Animated.timing(fadeInLeft, {

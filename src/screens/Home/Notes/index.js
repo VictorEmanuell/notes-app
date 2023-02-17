@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, TouchableOpacity, View, Text, Vibration } from 'react-native';
-import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
 import { styles } from './styles';
@@ -10,28 +10,65 @@ import Fonts from '../../../assets/Fonts';
 import { NoteCard } from '../../../components/NoteCard';
 
 export function Notes({ setMode, data, folderSelect, navigation }) {
-    const { notes } = data;
+    let { notes } = data;
+
+    if (folderSelect) {
+        let notesFolder = [];
+
+        notes.forEach(item => {
+            if (item.folder && item.folder === folderSelect.id) {
+                notesFolder.push(item)
+            }
+        })
+
+        notes = notesFolder
+    }
 
     const [visible, setVisible] = useState(false);
+    const [isSelectable, setIsSelectable] = useState(false);
 
     const hideMenu = () => setVisible(false);
-
     const showMenu = () => setVisible(true);
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPressIn={() => {
-                        Vibration.vibrate(15, false)
-                        setMode('folders')
-                    }}
-                >
-                    <SimpleLineIcons name='folder-alt' size={26} color={Colors.white} />
-                </TouchableOpacity>
+                {
+                    isSelectable ? (
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            onPressIn={() => {
+                                Vibration.vibrate(15, false)
 
-                <Text style={[styles.textHeader, { fontSize: 20 }]}>Minhas Notas</Text>
+                                if (isSelectable.length < notes.length) {
+                                    let notesId = []
+                                    notes.forEach(item => notesId.push(item.id))
+                                    setIsSelectable(notesId)
+                                } else {
+                                    setIsSelectable([])
+                                }
+                            }}
+                        >
+                            <Ionicons
+                                name={isSelectable.length < notes.length ? "checkmark-done-circle-outline" : "checkmark-done-circle"}
+                                size={26}
+                                color={Colors.white}
+                            />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            onPressIn={() => {
+                                Vibration.vibrate(15, false)
+                                setMode('folders')
+                            }}
+                        >
+                            <SimpleLineIcons name='folder-alt' size={26} color={Colors.white} />
+                        </TouchableOpacity>
+                    )
+                }
+
+                <Text style={[styles.textHeader, { fontSize: 20 }]}>{folderSelect ? folderSelect.name : 'Minhas notas'}</Text>
 
                 <Menu
                     visible={visible}
@@ -53,27 +90,53 @@ export function Notes({ setMode, data, folderSelect, navigation }) {
                     }}
                     animationDuration={200}
                 >
-                    <MenuItem
-                        onPress={() => {
-                            Vibration.vibrate(50, false)
-                            hideMenu()
-                        }}
-                        pressColor="#0000000D"
-                        textStyle={{
-                            fontFamily: Fonts.light,
-                            fontSize: 15
-                        }}
-                    >Selecionar</MenuItem>
+                    {
+                        isSelectable ? (
+                            <MenuItem
+                                onPress={() => {
+                                    Vibration.vibrate(50, false)
+                                    hideMenu()
+                                    setIsSelectable(false)
+                                }}
+                                pressColor="#0000000D"
+                                textStyle={{
+                                    fontFamily: Fonts.light,
+                                    fontSize: 15
+                                }}
+                            >Cancelar</MenuItem>
+                        ) : (
+                            <MenuItem
+                                onPress={() => {
+                                    Vibration.vibrate(50, false)
+                                    hideMenu()
+                                    setIsSelectable([])
+                                }}
+                                pressColor="#0000000D"
+                                textStyle={{
+                                    fontFamily: Fonts.light,
+                                    fontSize: 15
+                                }}
+                            >Selecionar</MenuItem>
+                        )
+                    }
                     <MenuDivider />
-                    {/* <MenuItem
-                        textStyle={{
-                            color: 'red',
-                            fontFamily: Fonts.light,
-                            fontSize: 15
-                        }}
-                        pressColor="#0000000D"
-                        onPress={hideMenu}
-                    >Excluir</MenuItem> */}
+                    {
+                        isSelectable && isSelectable.length > 0 ? (
+                            <MenuItem
+                                textStyle={{
+                                    color: 'red',
+                                    fontFamily: Fonts.light,
+                                    fontSize: 15
+                                }}
+                                pressColor="#0000000D"
+                                onPress={() => {
+                                    Vibration.vibrate(50, false)
+                                    setIsSelectable(false)
+                                    hideMenu()
+                                }}
+                            >Excluir</MenuItem>
+                        ) : null
+                    }
                 </Menu>
             </View>
 
@@ -83,31 +146,18 @@ export function Notes({ setMode, data, folderSelect, navigation }) {
             >
                 {
                     notes.map(({ id, title, date, text, folder }) => {
-                        if (folderSelect) {
-                            if (folder === folderSelect) {
-                                return (
-                                    <NoteCard
-                                        key={id}
-                                        id={id}
-                                        title={title}
-                                        date={date}
-                                        text={text}
-                                        navigation={navigation}
-                                    />
-                                )
-                            }
-                        } else {
-                            return (
-                                <NoteCard
-                                    key={id}
-                                    id={id}
-                                    title={title}
-                                    date={date}
-                                    text={text}
-                                    navigation={navigation}
-                                />
-                            )
-                        }
+                        return (
+                            <NoteCard
+                                key={id}
+                                id={id}
+                                title={title}
+                                date={date}
+                                text={text}
+                                navigation={navigation}
+                                isSelectable={isSelectable}
+                                setIsSelectable={setIsSelectable}
+                            />
+                        )
                     })
                 }
             </ScrollView>
