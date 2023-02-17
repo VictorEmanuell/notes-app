@@ -5,10 +5,12 @@ import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
 import { styles } from './styles';
 import Colors from '../../assets/Colors';
 
-export function NewNote({ navigation }) {
+export function EditNote({ route, navigation }) {
+    const editNote = route.params;
+
     const [inputHeight, setInputHeight] = useState(0);
-    const [title, onChangeTitle] = useState('');
-    const [text, onChangeText] = useState('');
+    const [title, onChangeTitle] = useState(editNote.title);
+    const [text, onChangeText] = useState(editNote.text);
 
     return (
         <ScrollView

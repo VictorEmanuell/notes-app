@@ -8,6 +8,7 @@ import Colors from '../../../assets/Colors';
 import Fonts from '../../../assets/Fonts';
 
 import { FolderCard, FolderOptions } from '../../../components/FolderCard';
+import { NewFolderMenu } from '../../../components/NewFolderMenu';
 
 const colors = [
     '#0c0636',
@@ -27,6 +28,7 @@ export function Folders({ setMode, data, setFolderSelect }) {
     const [visible, setVisible] = useState(false);
     const [isSelectable, setIsSelectable] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [colorSelect, setColorSelect] = useState();
 
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
@@ -141,18 +143,8 @@ export function Folders({ setMode, data, setFolderSelect }) {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <View style={{
-                        margin: 20,
-                        backgroundColor: 'white',
-                        borderRadius: 15,
-                        padding: 20,
-                        elevation: 5,
-                    }}>
-                        <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
-                        }}>
+                    <View style={styles.containerNewFolder}>
+                        <View style={styles.headerNewFolder}>
                             <SimpleLineIcons name='folder-alt' size={26} color='gray' />
 
                             <TouchableOpacity
@@ -174,30 +166,34 @@ export function Folders({ setMode, data, setFolderSelect }) {
                         <TextInput
                             keyboardType="visible-password"
                             placeholder='Nova pasta'
-                            style={{
-                                color: Colors.primary,
-                                padding: 10,
-                                fontFamily: Fonts.regular,
-                                fontSize: 15,
-                                borderBottomColor: '#c2c2c2',
-                                borderBottomWidth: 0.5,
-                                marginTop: 10
-                            }}
+                            style={styles.inputNewFolder}
                         />
 
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', marginTop: 15 }}>
+                        <View style={styles.colorsNewFolder}>
                             {
                                 colors.map(color => {
                                     return (
                                         <TouchableOpacity
                                             key={color}
-                                            style={{
-                                                backgroundColor: color,
-                                                padding: 20,
-                                                borderRadius: 10,
-                                                margin: 4
-                                            }}
                                             activeOpacity={0.8}
+                                            onPressIn={() => {
+                                                Vibration.vibrate(15, false)
+                                            }}
+                                            onPress={() => {
+                                                if (colorSelect === color) {
+                                                    setColorSelect(null)
+                                                } else {
+                                                    setColorSelect(color)
+                                                }
+                                            }}
+                                            style={[
+                                                styles.colorButton,
+                                                {
+                                                    backgroundColor: color,
+                                                    borderWidth: colorSelect === color ? 4 : 0,
+                                                    padding: colorSelect === color ? 16 : 20,
+                                                }
+                                            ]}
                                         />
                                     )
                                 })
@@ -209,26 +205,13 @@ export function Folders({ setMode, data, setFolderSelect }) {
                             onPressIn={() => {
                                 Vibration.vibrate(15, false)
                             }}
-                            style={{
-                                padding: 20,
-                                paddingVertical: 15,
-                                marginHorizontal: 20,
-                                marginVertical: 20,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: Colors.blue,
-                                borderRadius: 10,
-                            }}
+                            style={styles.saveButton}
                         >
-                            <Text style={{
-                                fontFamily: Fonts.bold,
-                                fontSize: 15,
-                                color: Colors.white
-                            }}>Criar</Text>
+                            <Text style={styles.textSaveButton}>Criar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal >
         </View>
     );
 }

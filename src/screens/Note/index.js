@@ -13,7 +13,6 @@ export function Note({ route, navigation }) {
     const [visible, setVisible] = useState(false);
 
     const hideMenu = () => setVisible(false);
-
     const showMenu = () => setVisible(true);
 
     return (
@@ -54,7 +53,10 @@ export function Note({ route, navigation }) {
                         animationDuration={200}
                     >
                         <MenuItem
-                            onPress={hideMenu}
+                            onPress={() => {
+                                hideMenu()
+                                navigation.navigate('EditNote', { id, title, date, text })
+                            }}
                             pressColor="#0000000D"
                             textStyle={{
                                 fontFamily: Fonts.light,
@@ -69,7 +71,10 @@ export function Note({ route, navigation }) {
                                 fontSize: 15
                             }}
                             pressColor="#0000000D"
-                            onPress={hideMenu}
+                            onPress={() => {
+                                hideMenu()
+
+                            }}
                         >Excluir</MenuItem>
                     </Menu>
                 </View>

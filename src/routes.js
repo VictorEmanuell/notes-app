@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Home } from './screens/Home';
 import { Note } from './screens/Note';
 import { NewNote } from './screens/NewNote';
+import { EditNote } from './screens/EditNote';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,13 @@ export default function Routes() {
                 <Stack.Screen
                     name='NewNote'
                     component={NewNote}
+                    options={{
+                        animation: 'slide_from_bottom'
+                    }}
+                />
+                <Stack.Screen
+                    name='EditNote'
+                    component={EditNote}
                     options={{
                         animation: 'slide_from_bottom'
                     }}
