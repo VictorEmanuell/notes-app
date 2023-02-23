@@ -1,21 +1,33 @@
+// import modules
+
 import { useState } from 'react';
 import { View, TextInput, Vibration, TouchableOpacity, KeyboardAvoidingView, ScrollView, Text } from 'react-native';
 import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
 
+// import styles/assets
+
 import { styles } from './styles';
 import Colors from '../../assets/Colors';
 
+// import components
+
 import { Loading } from '../../components/Loading';
+
+// import services
 
 import Storage from '../../services/Storage';
 
 export function EditNote({ route, navigation }) {
     const note = route.params;
 
+    // hooks
+
     const [inputHeight, setInputHeight] = useState(0);
     const [title, onChangeTitle] = useState(note.title);
     const [text, onChangeText] = useState(note.text);
     const [isLoading, setIsLoading] = useState(false);
+
+    // methods
 
     const editNote = async () => {
         setIsLoading(true)

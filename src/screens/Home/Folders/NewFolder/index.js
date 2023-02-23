@@ -1,12 +1,19 @@
+// import modules
+
 import { useState } from 'react';
 import { View, Vibration, Text, Modal, TouchableOpacity, TextInput, ToastAndroid } from 'react-native';
-
 import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
+
+// import styles/assets
 
 import { styles } from './styles';
 import Colors from '../../../../assets/Colors';
 
+// import services
+
 import Storage from '../../../../services/Storage';
+
+// folder colors
 
 const colors = [
     '#0c0636',
@@ -22,8 +29,12 @@ const colors = [
 ]
 
 export function NewFolder({ modalVisible, setModalVisible, isLoading, setIsLoading }) {
+    // hooks
+
     const [name, setName] = useState('');
     const [colorSelect, setColorSelect] = useState('');
+
+    // methods
 
     const newFolder = async () => {
         setIsLoading(true);

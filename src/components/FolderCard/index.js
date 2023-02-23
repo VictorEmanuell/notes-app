@@ -1,6 +1,10 @@
-import { useRef, useState } from 'react';
+// import modules
+
+import { useRef } from 'react';
 import { TouchableOpacity, Text, Animated, View, Vibration } from 'react-native';
 import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+
+// import styles/assets
 
 import { styles } from './styles';
 import Colors from '../../assets/Colors';

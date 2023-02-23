@@ -1,24 +1,40 @@
+// import modules
+
 import { useEffect, useState } from 'react';
 import { ScrollView, TouchableOpacity, View, Text, Vibration } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
+// import styles/assets
+
 import { styles } from './styles';
 import Colors from '../../../assets/Colors';
 import Fonts from '../../../assets/Fonts';
+
+// import components
 
 import { FolderCard, FolderOptions } from '../../../components/FolderCard';
 import { Loading } from '../../../components/Loading';
 import { NewFolder } from './NewFolder';
 
+// import services
+
 import Storage from '../../../services/Storage';
 
 export function Folders({ setMode, setFolderSelect }) {
+    // hooks
+
     const [folders, setFolders] = useState([]);
     const [visible, setVisible] = useState(false);
     const [isSelectable, setIsSelectable] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        getFolders()
+    }, [modalVisible || isSelectable])
+
+    // methods
 
     const getFolders = async () => {
         setFolders(await Storage.folders.getAll())
@@ -38,10 +54,6 @@ export function Folders({ setMode, setFolderSelect }) {
             hideMenu()
         }, 500)
     }
-
-    useEffect(() => {
-        getFolders()
-    }, [modalVisible || isSelectable])
 
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);

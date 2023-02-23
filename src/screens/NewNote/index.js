@@ -1,22 +1,35 @@
+// import modules
+
 import { useState } from 'react';
 import { View, TextInput, Vibration, TouchableOpacity, KeyboardAvoidingView, ScrollView, Text, ToastAndroid } from 'react-native';
 import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
 
+// import styles/assets
+
 import { styles } from './styles';
 import Colors from '../../assets/Colors';
+
+// import components
+
 import { Loading } from '../../components/Loading';
+
+// import services
 
 import Storage from '../../services/Storage';
 
 export function NewNote({ navigation, route }) {
+    const { folderSelect } = route.params
+
+    // hooks
+
     const [inputHeight, setInputHeight] = useState(0);
     const [title, onChangeTitle] = useState('');
     const [text, onChangeText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const { folderSelect } = route.params
+    // methods
 
-    const setNewNote = async () => {
+    const newNote = async () => {
         setIsLoading(true)
 
         if (text) {
@@ -86,7 +99,7 @@ export function NewNote({ navigation, route }) {
                     activeOpacity={0.8}
                     onPressIn={() => {
                         Vibration.vibrate(15, false)
-                        setNewNote()
+                        newNote()
                     }}
                     style={styles.saveButton}
                 >

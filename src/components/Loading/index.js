@@ -1,4 +1,8 @@
+// import modules
+
 import { View, Modal, ActivityIndicator, Text } from 'react-native';
+
+// import styles/assets
 
 import { styles } from './styles';
 import Colors from '../../assets/Colors';

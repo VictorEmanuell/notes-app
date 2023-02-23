@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#232931"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -27,10 +27,16 @@
       },
       "permissions": [
         "VIBRATE"
-      ]
+      ],
+      "package": "com.victoremanuell.notes"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "37bb60ba-9a23-41c6-8c51-d9894f12bfd2"
+      }
     }
   }
 }

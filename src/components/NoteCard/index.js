@@ -1,5 +1,9 @@
+// import modules
+
 import { useRef } from 'react';
 import { TouchableOpacity, Text, Animated, Vibration } from 'react-native';
+
+// import styles/assets
 
 import { styles } from './styles';
 import Colors from '../../assets/Colors';

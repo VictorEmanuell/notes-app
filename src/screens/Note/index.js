@@ -1,21 +1,33 @@
+// import modules
+
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, Vibration, ScrollView } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
+// import styles/assets
+
 import { styles } from './styles';
 import Colors from '../../assets/Colors';
 import Fonts from '../../assets/Fonts';
 
+// import components
+
 import { Loading } from '../../components/Loading';
+
+// import services
 
 import Storage from '../../services/Storage';
 
 export function Note({ route, navigation }) {
     const { id, title, date, text } = route.params;
 
+    // hooks
+
     const [visible, setVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    // methods
 
     const deleteNote = async () => {
         setIsLoading(true)

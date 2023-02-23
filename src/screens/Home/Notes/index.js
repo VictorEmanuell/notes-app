@@ -1,25 +1,44 @@
+// import modules
+
 import { useEffect, useState } from 'react';
 import { ScrollView, TouchableOpacity, View, Text, Vibration } from 'react-native';
 import { MaterialCommunityIcons, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { useIsFocused } from '@react-navigation/native';
 
+// import styles/assets
+
 import { styles } from './styles';
 import Colors from '../../../assets/Colors';
 import Fonts from '../../../assets/Fonts';
 
+// import components
+
 import { NoteCard } from '../../../components/NoteCard';
 import { Loading } from '../../../components/Loading';
+
+// import services
 
 import Storage from '../../../services/Storage';
 
 export function Notes({ setMode, folderSelect, navigation }) {
+    //hooks
+
     const [notes, setNotes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [visible, setVisible] = useState(false);
     const [isSelectable, setIsSelectable] = useState(false);
-
     const isFocused = useIsFocused();
+
+    useEffect(() => {
+        getNotes()
+    }, [isFocused])
+
+    useEffect(() => {
+        getNotes()
+    }, [isSelectable])
+
+    // methods
 
     const getNotes = async () => {
         let response = await Storage.notes.getAll()
@@ -54,14 +73,6 @@ export function Notes({ setMode, folderSelect, navigation }) {
             hideMenu()
         }, 500)
     }
-
-    useEffect(() => {
-        getNotes()
-    }, [isFocused])
-
-    useEffect(() => {
-        getNotes()
-    }, [isSelectable])
 
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
