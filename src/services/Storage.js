@@ -1,4 +1,35 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+
+const startStorage = async () => {
+    const initStorage = async () => {
+        try {
+            await AsyncStorage.multiSet([['@notes', JSON.stringify([])], ['@folders', JSON.stringify([])]])
+        } catch (e) {
+            return 'error'
+        }
+    }
+
+    let keys = []
+
+    try {
+        keys = await AsyncStorage.getAllKeys()
+    } catch (e) {
+        return 'error'
+    }
+
+    if (keys.length > 0) {
+        if (keys.includes('@notes') && keys.includes('@folders')) {
+            return 'success'
+        } else {
+            await initStorage()
+            return 'success'
+        }
+    } else {
+        await initStorage()
+        return 'success'
+    }
+}
 
 const folders = {
     new: async ({ name, color }) => {
@@ -7,12 +38,32 @@ const folders = {
             name,
             color
         }
+
+        let currentValue = await folders.getAll()
+
+        try {
+            await AsyncStorage.setItem('@folders', JSON.stringify([data, ...currentValue]))
+            return 'success'
+        } catch (e) {
+            return 'error'
+        }
     },
     delete: async (id) => {
 
     },
     edit: async ({ id, edited }) => {
 
+    },
+    getAll: async () => {
+        let getFolders;
+
+        try {
+            getFolders = JSON.parse(await AsyncStorage.getItem('@folders'))
+        } catch (e) {
+            return 'error'
+        }
+
+        return getFolders
     }
 }
 
@@ -21,9 +72,18 @@ const notes = {
         const data = {
             id: uuid.v4(),
             title,
-            date: Date(),
+            date: await getDate(),
             text,
             folder
+        }
+
+        let currentValue = await notes.getAll()
+
+        try {
+            await AsyncStorage.setItem('@notes', JSON.stringify([data, ...currentValue]))
+            return 'success'
+        } catch (e) {
+            return 'error'
         }
     },
     delete: async (id) => {
@@ -31,13 +91,24 @@ const notes = {
     },
     edit: async ({ id, edited }) => {
 
+    },
+    getAll: async () => {
+        let getNotes;
+
+        try {
+            getNotes = JSON.parse(await AsyncStorage.getItem('@notes'))
+        } catch (e) {
+            return 'error'
+        }
+
+        return getNotes
     }
 }
 
-const Date = () => {
+const getDate = async () => {
     const date = new Date()
 
-    const day = String(date.getDay()).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const year = String(date.getFullYear())
 
@@ -46,4 +117,4 @@ const Date = () => {
     return dateFormated
 }
 
-export default { folders, notes }
+export default { startStorage, folders, notes }

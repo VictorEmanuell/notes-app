@@ -1,28 +1,50 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, TouchableOpacity, View, Text, Vibration } from 'react-native';
 import { MaterialCommunityIcons, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { useIsFocused } from '@react-navigation/native';
 
 import { styles } from './styles';
 import Colors from '../../../assets/Colors';
 import Fonts from '../../../assets/Fonts';
 
 import { NoteCard } from '../../../components/NoteCard';
+import { Loading } from '../../../components/Loading';
 
-export function Notes({ setMode, data, folderSelect, navigation }) {
-    let { notes } = data;
+import Storage from '../../../services/Storage';
 
-    if (folderSelect) {
-        let notesFolder = [];
+export function Notes({ setMode, folderSelect, navigation }) {
+    const [notes, setNotes] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-        notes.forEach(item => {
-            if (item.folder && item.folder === folderSelect.id) {
-                notesFolder.push(item)
-            }
-        })
+    const isFocused = useIsFocused();
 
-        notes = notesFolder
+    const getNotes = async () => {
+        let response = await Storage.notes.getAll()
+
+        if (folderSelect) {
+            let notesFolder = [];
+            
+            response.forEach(item => {
+
+                if (item.folder && item.folder === folderSelect.id) {
+                    notesFolder.push(item)
+                }
+            })
+
+            setNotes(notesFolder)
+        } else {
+            setNotes(response)
+        }
+
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 500)
     }
+
+    useEffect(() => {
+        getNotes()
+    }, [isFocused])
 
     const [visible, setVisible] = useState(false);
     const [isSelectable, setIsSelectable] = useState(false);
@@ -167,11 +189,12 @@ export function Notes({ setMode, data, folderSelect, navigation }) {
                 activeOpacity={0.8}
                 onPressIn={() => {
                     Vibration.vibrate(15, false)
-                    navigation.navigate('NewNote')
+                    navigation.navigate('NewNote', { folderSelect })
                 }}
             >
                 <MaterialCommunityIcons name='pencil' size={28} color={Colors.white} />
             </TouchableOpacity>
+            <Loading active={isLoading} text="Carregando..." />
         </View>
     );
 }

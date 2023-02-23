@@ -14,7 +14,6 @@ export function Home({ navigation }) {
             <Notes
                 navigation={navigation}
                 setMode={setMode}
-                data={Data}
                 folderSelect={folderSelect}
             />
         )
@@ -25,7 +24,6 @@ export function Home({ navigation }) {
             <Folders
                 navigation={navigation}
                 setMode={setMode}
-                data={Data}
                 setFolderSelect={setFolderSelect}
             />
         )

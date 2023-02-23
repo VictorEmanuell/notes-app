@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { ScrollView, TouchableOpacity, View, Text, Vibration, Modal, TextInput } from 'react-native';
-import { SimpleLineIcons, AntDesign } from '@expo/vector-icons'
+import { useEffect, useState } from 'react';
+import { ScrollView, TouchableOpacity, View, Text, Vibration } from 'react-native';
+import { SimpleLineIcons } from '@expo/vector-icons'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
 import { styles } from './styles';
@@ -8,27 +8,29 @@ import Colors from '../../../assets/Colors';
 import Fonts from '../../../assets/Fonts';
 
 import { FolderCard, FolderOptions } from '../../../components/FolderCard';
-import { NewFolderMenu } from '../../../components/NewFolderMenu';
+import { Loading } from '../../../components/Loading';
+import { NewFolder } from './NewFolder';
 
-const colors = [
-    '#0c0636',
-    '#095169',
-    '#059b9a',
-    '#53ba83',
-    '#ef4335',
-    '#f68b36',
-    '#cae081',
-    '#88eed0',
-    '#314c53',
-    '#5a7f78'
-]
+import Storage from '../../../services/Storage';
 
-export function Folders({ setMode, data, setFolderSelect }) {
-    const { folders } = data;
+export function Folders({ setMode, setFolderSelect }) {
+    const [folders, setFolders] = useState([]);
     const [visible, setVisible] = useState(false);
     const [isSelectable, setIsSelectable] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [colorSelect, setColorSelect] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    const getFolders = async () => {
+        setFolders(await Storage.folders.getAll())
+
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 500)
+    }
+
+    useEffect(() => {
+        getFolders()
+    }, [modalVisible])
 
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
@@ -130,88 +132,8 @@ export function Folders({ setMode, data, setFolderSelect }) {
                     })
                 }
             </ScrollView>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}>
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
-                    <View style={styles.containerNewFolder}>
-                        <View style={styles.headerNewFolder}>
-                            <SimpleLineIcons name='folder-alt' size={26} color='gray' />
-
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                onPressIn={() => {
-                                    Vibration.vibrate(15, false)
-                                    setModalVisible(false)
-                                }}
-                                style={{
-                                    padding: 5,
-                                    backgroundColor: 'red',
-                                    borderRadius: 10,
-                                }}
-                            >
-                                <AntDesign name="close" size={24} color={Colors.white} />
-                            </TouchableOpacity>
-                        </View>
-
-                        <TextInput
-                            keyboardType="visible-password"
-                            placeholder='Nova pasta'
-                            style={styles.inputNewFolder}
-                        />
-
-                        <View style={styles.colorsNewFolder}>
-                            {
-                                colors.map(color => {
-                                    return (
-                                        <TouchableOpacity
-                                            key={color}
-                                            activeOpacity={0.8}
-                                            onPressIn={() => {
-                                                Vibration.vibrate(15, false)
-                                            }}
-                                            onPress={() => {
-                                                if (colorSelect === color) {
-                                                    setColorSelect(null)
-                                                } else {
-                                                    setColorSelect(color)
-                                                }
-                                            }}
-                                            style={[
-                                                styles.colorButton,
-                                                {
-                                                    backgroundColor: color,
-                                                    borderWidth: colorSelect === color ? 4 : 0,
-                                                    padding: colorSelect === color ? 16 : 20,
-                                                }
-                                            ]}
-                                        />
-                                    )
-                                })
-                            }
-                        </View>
-
-                        <TouchableOpacity
-                            activeOpacity={0.8}
-                            onPressIn={() => {
-                                Vibration.vibrate(15, false)
-                            }}
-                            style={styles.saveButton}
-                        >
-                            <Text style={styles.textSaveButton}>Criar</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal >
+            <NewFolder modalVisible={modalVisible} setModalVisible={setModalVisible} isLoading={isLoading} setIsLoading={setIsLoading} />
+            <Loading active={isLoading} text="Carregando..." />
         </View>
     );
 }

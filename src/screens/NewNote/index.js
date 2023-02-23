@@ -1,14 +1,41 @@
 import { useState } from 'react';
-import { View, TextInput, Vibration, TouchableOpacity, KeyboardAvoidingView, ScrollView, Text } from 'react-native';
+import { View, TextInput, Vibration, TouchableOpacity, KeyboardAvoidingView, ScrollView, Text, ToastAndroid } from 'react-native';
 import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
 
 import { styles } from './styles';
 import Colors from '../../assets/Colors';
+import { Loading } from '../../components/Loading';
 
-export function NewNote({ navigation }) {
+import Storage from '../../services/Storage';
+
+export function NewNote({ navigation, route }) {
     const [inputHeight, setInputHeight] = useState(0);
     const [title, onChangeTitle] = useState('');
     const [text, onChangeText] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { folderSelect } = route.params
+
+    const setNewNote = async () => {
+        setIsLoading(true)
+
+        if (text) {
+            const response = await Storage.notes.new({ title, text, folder: folderSelect ? folderSelect.id : null })
+
+            if (response === 'error') {
+                ToastAndroid.show('Ocorreu um erro!', ToastAndroid.SHORT)
+            }
+        } else {
+            setIsLoading(false)
+            ToastAndroid.show('Sua nota não pode estar vazia!', ToastAndroid.SHORT)
+            return;
+        }
+
+        setTimeout(() => {
+            setIsLoading(false)
+            navigation.navigate('Home')
+        }, 1500)
+    }
 
     return (
         <ScrollView
@@ -59,11 +86,14 @@ export function NewNote({ navigation }) {
                     activeOpacity={0.8}
                     onPressIn={() => {
                         Vibration.vibrate(15, false)
+                        setNewNote()
                     }}
                     style={styles.saveButton}
                 >
                     <Text style={styles.textSave}>Salvar</Text>
                 </TouchableOpacity>
+
+                <Loading active={isLoading} text="Salvando..." />
             </KeyboardAvoidingView>
         </ScrollView>
     );

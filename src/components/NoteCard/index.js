@@ -38,6 +38,7 @@ export function NoteCard({ id, title, date, text, navigation, isSelectable, setI
                             setIsSelectable(false);
                         }
                     }}
+                    delayPressIn={100}
                 >
                     {title ? <Text numberOfLines={1} style={styles.title}>{title}</Text> : null}
                     {date ? <Text numberOfLines={1} style={styles.date}>{date}</Text> : null}

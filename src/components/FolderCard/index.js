@@ -49,6 +49,7 @@ export function FolderCard({
                             setIsSelectable(false);
                         }
                     }}
+                    delayPressIn={100}
                 >
                     <Ionicons
                         name={isSelectable.includes(id) ? 'checkmark-circle' : 'checkmark-circle-outline'}
