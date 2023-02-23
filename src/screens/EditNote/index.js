@@ -5,12 +5,31 @@ import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
 import { styles } from './styles';
 import Colors from '../../assets/Colors';
 
+import { Loading } from '../../components/Loading';
+
+import Storage from '../../services/Storage';
+
 export function EditNote({ route, navigation }) {
-    const editNote = route.params;
+    const note = route.params;
 
     const [inputHeight, setInputHeight] = useState(0);
-    const [title, onChangeTitle] = useState(editNote.title);
-    const [text, onChangeText] = useState(editNote.text);
+    const [title, onChangeTitle] = useState(note.title);
+    const [text, onChangeText] = useState(note.text);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const editNote = async () => {
+        setIsLoading(true)
+
+        await Storage.notes.edit(note.id, {
+            title,
+            text
+        })
+
+        setTimeout(() => {
+            setIsLoading(false)
+            navigation.navigate('Home')
+        }, 500)
+    }
 
     return (
         <ScrollView
@@ -61,12 +80,15 @@ export function EditNote({ route, navigation }) {
                     activeOpacity={0.8}
                     onPressIn={() => {
                         Vibration.vibrate(15, false)
+                        editNote()
                     }}
                     style={styles.saveButton}
                 >
                     <Text style={styles.textSave}>Salvar</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
+
+            <Loading active={isLoading} text="Salvando..." />
         </ScrollView>
     );
 }

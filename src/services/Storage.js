@@ -123,19 +123,31 @@ const notes = {
             return 'error'
         }
     },
-    edit: async ({ id, edited }) => {
+    edit: async (id, { title, text }) => {
+        try {
+            let getNotes = await notes.getAll()
+            let index = getNotes.findIndex(note => note.id === id)
 
+            getNotes[index].title = title
+            getNotes[index].text = text
+
+            await AsyncStorage.setItem('@notes', JSON.stringify([...getNotes]))
+
+            return 'success'
+        } catch (e) {
+            console.log(e)
+            return 'error'
+        }
     },
     getAll: async () => {
-        let getNotes;
-
         try {
+            let getNotes;
             getNotes = JSON.parse(await AsyncStorage.getItem('@notes'))
+
+            return getNotes
         } catch (e) {
             return 'error'
         }
-
-        return getNotes
     }
 }
 
