@@ -7,10 +7,26 @@ import { styles } from './styles';
 import Colors from '../../assets/Colors';
 import Fonts from '../../assets/Fonts';
 
+import { Loading } from '../../components/Loading';
+
+import Storage from '../../services/Storage';
+
 export function Note({ route, navigation }) {
     const { id, title, date, text } = route.params;
 
     const [visible, setVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const deleteNote = async () => {
+        setIsLoading(true)
+        await Storage.notes.delete([id])
+
+        setTimeout(() => {
+            setIsLoading(false)
+            hideMenu()
+            navigation.navigate('Home')
+        }, 500)
+    }
 
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
@@ -72,8 +88,8 @@ export function Note({ route, navigation }) {
                             }}
                             pressColor="#0000000D"
                             onPress={() => {
-                                hideMenu()
-
+                                Vibration.vibrate(50, false)
+                                deleteNote()
                             }}
                         >Excluir</MenuItem>
                     </Menu>
@@ -86,6 +102,8 @@ export function Note({ route, navigation }) {
             >
                 <Text dataDetectorType='all' selectable={true} style={styles.textBody}>{text}</Text>
             </ScrollView>
+
+            <Loading active={isLoading} text="Excluindo..." />
         </View>
     );
 }

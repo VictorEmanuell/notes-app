@@ -16,6 +16,8 @@ import Storage from '../../../services/Storage';
 export function Notes({ setMode, folderSelect, navigation }) {
     const [notes, setNotes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [visible, setVisible] = useState(false);
+    const [isSelectable, setIsSelectable] = useState(false);
 
     const isFocused = useIsFocused();
 
@@ -24,7 +26,7 @@ export function Notes({ setMode, folderSelect, navigation }) {
 
         if (folderSelect) {
             let notesFolder = [];
-            
+
             response.forEach(item => {
 
                 if (item.folder && item.folder === folderSelect.id) {
@@ -42,12 +44,24 @@ export function Notes({ setMode, folderSelect, navigation }) {
         }, 500)
     }
 
+    const deleteNotes = async () => {
+        setIsLoading(true)
+        await Storage.notes.delete(isSelectable)
+
+        setTimeout(() => {
+            setIsSelectable(false)
+            setIsLoading(false)
+            hideMenu()
+        }, 500)
+    }
+
     useEffect(() => {
         getNotes()
     }, [isFocused])
 
-    const [visible, setVisible] = useState(false);
-    const [isSelectable, setIsSelectable] = useState(false);
+    useEffect(() => {
+        getNotes()
+    }, [isSelectable])
 
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
@@ -153,8 +167,7 @@ export function Notes({ setMode, folderSelect, navigation }) {
                                 pressColor="#0000000D"
                                 onPress={() => {
                                     Vibration.vibrate(50, false)
-                                    setIsSelectable(false)
-                                    hideMenu()
+                                    deleteNotes()
                                 }}
                             >Excluir</MenuItem>
                         ) : null

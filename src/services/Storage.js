@@ -49,7 +49,26 @@ const folders = {
         }
     },
     delete: async (id) => {
+        let getNotes = await notes.getAll()
+        let getFolders = await folders.getAll()
 
+        if (typeof id === 'object' && id.length > 0) {
+            id.forEach(async (folder) => {
+                try {
+                    getFolders = getFolders.filter(i => i.id != folder)
+                    await AsyncStorage.setItem('@folders', JSON.stringify([...getFolders]))
+
+                    getNotes = getNotes.filter(i => i.folder != folder)
+                    await AsyncStorage.setItem('@notes', JSON.stringify([...getNotes]))
+
+                    return 'success'
+                } catch (e) {
+                    return 'error'
+                }
+            })
+        } else {
+            return 'error'
+        }
     },
     edit: async ({ id, edited }) => {
 
@@ -87,7 +106,22 @@ const notes = {
         }
     },
     delete: async (id) => {
+        let getNotes = await notes.getAll()
 
+        if (typeof id === 'object' && id.length > 0) {
+            id.forEach(async (note) => {
+                try {
+                    getNotes = getNotes.filter(i => i.id != note)
+                    await AsyncStorage.setItem('@notes', JSON.stringify([...getNotes]))
+
+                    return 'success'
+                } catch (e) {
+                    return 'error'
+                }
+            })
+        } else {
+            return 'error'
+        }
     },
     edit: async ({ id, edited }) => {
 

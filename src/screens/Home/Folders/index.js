@@ -28,9 +28,20 @@ export function Folders({ setMode, setFolderSelect }) {
         }, 500)
     }
 
+    const deleteFolders = async () => {
+        setIsLoading(true)
+        await Storage.folders.delete(isSelectable)
+
+        setTimeout(() => {
+            setIsSelectable(false)
+            setIsLoading(false)
+            hideMenu()
+        }, 500)
+    }
+
     useEffect(() => {
         getFolders()
-    }, [modalVisible])
+    }, [modalVisible || isSelectable])
 
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
@@ -94,8 +105,7 @@ export function Folders({ setMode, setFolderSelect }) {
                                 pressColor="#0000000D"
                                 onPress={() => {
                                     Vibration.vibrate(50, false)
-                                    setIsSelectable(false)
-                                    hideMenu()
+                                    deleteFolders()
                                 }}
                             >Excluir</MenuItem>
                         ) : null
