@@ -27,7 +27,7 @@
 
 > ### Baixar APK
 
-[download](https://github.com/VictorEmanuell/notes-app/releases/download/release/Notes.apk)
+- [download](https://github.com/VictorEmanuell/notes-app/releases/download/release/Notes.apk)
 
 <br>
 
