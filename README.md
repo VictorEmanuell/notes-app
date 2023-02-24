@@ -2,8 +2,8 @@
 
 <br>
 
-![20230224_010315_0000](https://user-images.githubusercontent.com/66982212/221089501-05219b14-e3f1-416e-b52a-80c5351e38d1.png)
-![20230224_010315_0001](https://user-images.githubusercontent.com/66982212/221089507-4bc8fe36-11fe-421d-9951-16bbafb0c3c9.png)
+![20230224_010315_0000](https://github.com/VictorEmanuell/notes-app/raw/main/public/20230224_010315_0000.png)
+![20230224_010315_0001](https://github.com/VictorEmanuell/notes-app/raw/main/public/20230224_010315_0001.png)
 
 <br>
 
