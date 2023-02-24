@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { SafeAreaView, StatusBar, ToastAndroid } from 'react-native';
 import {
   useFonts,
@@ -15,18 +14,16 @@ import Routes from './src/routes';
 
 import Storage from './src/services/Storage';
 
-export default function App() {
-  const start = async () => {
-    let response = await Storage.startStorage()
+const start = async () => {
+  let response = await Storage.startStorage()
 
-    if (response === 'error') {
-      ToastAndroid.show('Ocorreu um erro!', ToastAndroid.SHORT);
-    }
+  if (response === 'error') {
+    ToastAndroid.show('Ocorreu um erro!', ToastAndroid.SHORT);
   }
+}
 
-  useEffect(() => {
-    start()
-  }, [])
+export default function App() {
+  start()
 
   NavigationBar.setBackgroundColorAsync(Colors.primary);
   NavigationBar.setBorderColorAsync(Colors.secondary);

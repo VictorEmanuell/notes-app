@@ -3,14 +3,10 @@
     "version": ">= 3.7.0"
   },
   "build": {
-    "development": {
-      "developmentClient": true
-    },
     "apk": {
       "android": {
         "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease",
-        "developmentClient": false
+        "gradleCommand": ":app:assembleRelease"
       }
     },
     "production": {}
